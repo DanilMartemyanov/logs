@@ -1,13 +1,14 @@
 package backend.academy.analyzer.services.implementations;
 
+import backend.academy.analyzer.services.interfaces.FactoryLog;
 import backend.academy.analyzer.services.interfaces.ManagerLogs;
-import backend.academy.analyzer.services.interfaces.ParserLogs;
+
 
 public class ManagerImpl implements ManagerLogs {
-    private ParserLogs parserLogs;
+    private FactoryLog factoryLog;
 
-    public ManagerImpl(ParserLogs parserLogs) {
-        this.parserLogs = parserLogs;
+    public ManagerImpl(FactoryLog factoryLog) {
+        this.factoryLog = factoryLog;
     }
 
 }

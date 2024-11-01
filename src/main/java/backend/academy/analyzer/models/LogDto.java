@@ -27,15 +27,15 @@ public record LogDto(
 ) {
     @Override
     public String toString() {
-        return "remoteAddress: " + remoteAddress
-            + ", remoteUser: " + remoteUser
-            + ", timeLocal: " + timeLocal
-            + ", requestType: " + requestType
-            + ", statusCode: " + statusCode
-            + ", pathResources: " + pathResources
-            + ", bodyByteSent: " + bodyByteSent
-            + ", httpRefer: " + httpRefer
-            + ", httpUserAgent: " + httpUserAgent;
+        return "remoteAddress: " + remoteAddress + "\n"
+            + "remoteUser: " + remoteUser + "\n"
+            + "timeLocal: " + timeLocal + "\n"
+            + "requestType: " + requestType + "\n"
+            + "statusCode: " + statusCode + "\n"
+            + "pathResources: " + pathResources + "\n"
+            + "bodyByteSent: " + bodyByteSent + "\n"
+            + "httpRefer: " + httpRefer + "\n"
+            + "httpUserAgent: " + httpUserAgent + "\n";
 
     }
 }
