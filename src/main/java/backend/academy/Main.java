@@ -1,8 +1,7 @@
 package backend.academy;
 
-import lombok.experimental.UtilityClass;
 import java.text.ParseException;
-
+import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class Main {

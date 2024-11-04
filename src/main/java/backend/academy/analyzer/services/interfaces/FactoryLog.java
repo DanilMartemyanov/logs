@@ -1,7 +1,7 @@
 package backend.academy.analyzer.services.interfaces;
 
-import backend.academy.analyzer.models.LogDto;
+import backend.academy.analyzer.models.LogRecord;
 
 public interface FactoryLog {
-    LogDto createLogDto(String logsLine);
+    LogRecord createLogDto(String logsLine);
 }

@@ -1,6 +1,6 @@
 package backend.academy.analyzer;
 
-import backend.academy.analyzer.models.LogDto;
+import backend.academy.analyzer.models.LogRecord;
 import backend.academy.analyzer.services.implementations.FactoryLogsImpl;
 import backend.academy.analyzer.services.implementations.ReaderImpl;
 import backend.academy.analyzer.services.interfaces.FactoryLog;
@@ -15,7 +15,7 @@ public class ReaderTest {
     void readFileTest(){
         FactoryLog factoryLog = new FactoryLogsImpl();
         Reader reader = new ReaderImpl(factoryLog);
-        Stream<LogDto> logs = reader.readFile(Path.of("src/main/resources/logs/log.txt"));
+        Stream<LogRecord> logs = reader.readFile(Path.of("src/main/resources/logs/log.txt"));
         Assertions.assertNotNull(logs);
 
     }

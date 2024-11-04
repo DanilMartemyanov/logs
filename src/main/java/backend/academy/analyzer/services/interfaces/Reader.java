@@ -1,9 +1,9 @@
 package backend.academy.analyzer.services.interfaces;
 
-import backend.academy.analyzer.models.LogDto;
+import backend.academy.analyzer.models.LogRecord;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
 public interface Reader {
-    Stream<LogDto> readFile(Path path);
+    Stream<LogRecord> readFile(Path path);
 }
