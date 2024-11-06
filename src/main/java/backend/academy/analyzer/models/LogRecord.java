@@ -27,7 +27,6 @@ public record LogRecord(
             + "bodyByteSent: " + bodyByteSent + "\n"
             + "httpRefer: " + httpRefer + "\n"
             + "httpUserAgent: " + httpUserAgent + "\n";
-
     }
 }
 

@@ -10,8 +10,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -31,19 +33,19 @@ public class ReaderTest {
         mockHttpClient = Mockito.mock(HttpClient.class);
     }
 
-//    @Test
-//    void readFileTest(){
-//        FactoryLog factoryLog = new FactoryLogsImpl();
-//        Reader reader = new ReaderImpl(factoryLog);
-//        Stream<LogRecord> logs = reader.readFile(Path.of("src/main/resources/logs/log.txt"));
-//        Assertions.assertNotNull(logs);
-//
-//    }
+    @Test
+    void readFileTest(){
+        FactoryLog factoryLog = new FactoryLogsImpl();
+        Reader reader = new ReaderImpl(factoryLog);
+        Stream<LogRecord> logs = reader.readFile(Path.of("src/main/resources/logs/log.txt"));
+        Assertions.assertNotNull(logs);
+
+    }
 
     @Test
     void getResponseServerTest() throws IOException, InterruptedException {
         String mockData = "log line 1";
-        InputStream mockInputStream = new java.io.ByteArrayInputStream(mockData.getBytes());
+        InputStream mockInputStream = new ByteArrayInputStream(mockData.getBytes());
 
         when(mockHttpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
             .thenReturn(mockHttpResponse);
@@ -55,5 +57,15 @@ public class ReaderTest {
             Assertions.assertEquals("log line 1", reader.readLine());
         }
 
+    }
+
+    @Test
+    void readLogsByURLTest(){
+        Reader logReader = new ReaderImpl(new FactoryLogsImpl());
+        String log = "93.180.71.3 - - [17/May/2015:08:05:32 +0000] \"GET /downloads/product_1 HTTP/1.1\" 304 0 \"-\" \"Debian APT-HTTP/1.3 (0.8.16~exp12ubuntu10.21)\"";
+        InputStream mockInputStream = new ByteArrayInputStream(log.getBytes());
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(mockInputStream));
+        Stream<LogRecord> logs =  logReader.readLogsByURL(bufferedReader);
+        Assertions.assertNotNull(logs);
     }
 }

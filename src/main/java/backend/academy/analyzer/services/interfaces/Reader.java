@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 public interface Reader {
     Stream<LogRecord> readFile(Path path);
 
-    Stream<LogRecord> readLogsByURL(String url, HttpClient httpClient);
+    Stream<LogRecord> readLogsByURL(BufferedReader response);
 
     BufferedReader getResponseServer(String url, HttpClient httpClient);
 }

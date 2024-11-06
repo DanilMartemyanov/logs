@@ -46,8 +46,18 @@ public class ReaderImpl implements Reader {
     }
 
     @Override
-    public Stream<LogRecord> readLogsByURL(String url, HttpClient httpClient) {
-        return null;
+    public Stream<LogRecord> readLogsByURL(BufferedReader response) {
+        return response
+            .lines()
+            .map(line -> {
+                try {
+                    return factoryLog.createLogDto(line);
+                } catch (Exception ex) {
+                    log.error("Ошибка при обработке строки: " + line, ex);
+                    return null;
+                }
+            })
+            .filter(logDto -> logDto != null);
     }
 
     public  BufferedReader getResponseServer(String url, HttpClient httpClient) {
