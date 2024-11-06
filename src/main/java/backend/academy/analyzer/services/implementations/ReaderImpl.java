@@ -30,34 +30,16 @@ public class ReaderImpl implements Reader {
     @Override
     public Stream<LogRecord> readFile(Path path) {
         try {
-            return Files.lines(Path.of(path.toUri()))
-                .map(line -> {
-                    try {
-                        return factoryLog.createLogDto(line);
-                    } catch (Exception ex) {
-                        log.error("Ошибка при обработке строки: " + line, ex);
-                        return null;
-                    }
-                })
-                .filter(logDto -> logDto != null);
+            return getStreamRecordFromStreamString(Files.lines(Path.of(path.toUri())));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public Stream<LogRecord> readLogsByURL(BufferedReader response) {
-        return response
-            .lines()
-            .map(line -> {
-                try {
-                    return factoryLog.createLogDto(line);
-                } catch (Exception ex) {
-                    log.error("Ошибка при обработке строки: " + line, ex);
-                    return null;
-                }
-            })
-            .filter(logDto -> logDto != null);
+    public Stream<LogRecord> readLogsByURL(String url, HttpClient httpClient) {
+        BufferedReader response = getResponseServer(url, httpClient);
+        return getStreamRecordFromStreamString(response.lines());
     }
 
     public  BufferedReader getResponseServer(String url, HttpClient httpClient) {
@@ -77,5 +59,18 @@ public class ReaderImpl implements Reader {
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private Stream<LogRecord> getStreamRecordFromStreamString(Stream<String> stream){
+        return stream
+            .map(line -> {
+                try {
+                    return factoryLog.createLogDto(line);
+                } catch (Exception ex) {
+                    log.error("Ошибка при обработке строки: " + line, ex);
+                    return null;
+                }
+            })
+            .filter(logDto -> logDto != null);
     }
 }

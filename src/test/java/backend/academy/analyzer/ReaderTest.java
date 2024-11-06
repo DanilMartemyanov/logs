@@ -18,6 +18,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.stream.Stream;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -60,12 +61,24 @@ public class ReaderTest {
     }
 
     @Test
-    void readLogsByURLTest(){
+    void readLogsByURLTest() throws IOException, InterruptedException {
         Reader logReader = new ReaderImpl(new FactoryLogsImpl());
         String log = "93.180.71.3 - - [17/May/2015:08:05:32 +0000] \"GET /downloads/product_1 HTTP/1.1\" 304 0 \"-\" \"Debian APT-HTTP/1.3 (0.8.16~exp12ubuntu10.21)\"";
         InputStream mockInputStream = new ByteArrayInputStream(log.getBytes());
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(mockInputStream));
-        Stream<LogRecord> logs =  logReader.readLogsByURL(bufferedReader);
+        when(mockHttpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
+            .thenReturn(mockHttpResponse);
+        when(mockHttpResponse.body()).thenReturn(mockInputStream);
+        Stream<LogRecord> logs =  logReader.readLogsByURL("http://example.com/logs", mockHttpClient);
+        Assertions.assertNotNull(logs);
+    }
+
+    @Test
+    void readLogsTest(){
+        Reader logReader = new ReaderImpl(new FactoryLogsImpl());
+        String link = "https://raw.githubusercontent.com/elastic/examples/master/Common%20Data%20Formats/nginx_logs/nginx_logs";
+        HttpClient httpClient = HttpClient.newHttpClient();
+        Stream<LogRecord> logs = logReader.readLogsByURL(link, httpClient);
         Assertions.assertNotNull(logs);
     }
 }
