@@ -38,7 +38,7 @@ public class ReaderTest {
     void readFileTest(){
         FactoryLog factoryLog = new FactoryLogsImpl();
         Reader reader = new ReaderImpl(factoryLog);
-        Stream<LogRecord> logs = reader.readFile(Path.of("src/main/resources/logs/log.txt"));
+        Stream<LogRecord> logs = reader.readFile("src/main/resources/logs/log.txt");
         Assertions.assertNotNull(logs);
 
     }

@@ -28,9 +28,11 @@ public class ReaderImpl implements Reader {
     }
 
     @Override
-    public Stream<LogRecord> readFile(Path path) {
+    public Stream<LogRecord> readFile(String userPath) {
+        Path path = Path.of(userPath) ;
         try {
-            return getStreamRecordFromStreamString(Files.lines(Path.of(path.toUri())));
+
+            return getStreamRecordFromStreamString(Files.lines(path));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -8,11 +8,6 @@ import java.util.stream.Stream;
 public interface CalculatingStatistics {
     int getCountsRequest(Stream<LogRecord> logs);
 
-    Map<String, Long> getFrequentlyRequestsResources(Stream<LogRecord> logs);
-
-    List<String> getFrequentlyStatusCode(Stream<LogRecord> logs);
-
-    String getMediumSizeAnswerServer(Stream<LogRecord> logs);
-
+    StatisticsData getStatistic(Stream<LogRecord> logs);
 
 }

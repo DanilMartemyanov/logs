@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.util.stream.Stream;
 
 public interface Reader {
-    Stream<LogRecord> readFile(Path path);
+    Stream<LogRecord> readFile(String path);
 
     Stream<LogRecord> readLogsByURL(String url, HttpClient httpClient);
 
