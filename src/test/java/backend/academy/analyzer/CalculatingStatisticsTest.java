@@ -17,10 +17,11 @@ public class CalculatingStatisticsTest {
     void getStatisticsTest() {
         FactoryLog factoryLog = new FactoryLogsImpl();
         Reader reader = new ReaderImpl(factoryLog);
-        String link = "src/main/resources/logs/log.txt";
+        String link = "src/main/resources/logs/";
         Stream<LogRecord> logRecordStream = reader.readFile(link);
         CalculatingStatistics calculatingStatistics = new CalculatingStatisticsImpl();
         StatisticsData statisticsData = calculatingStatistics.getStatistic(logRecordStream);
+        System.out.println(statisticsData.totalRequests());
         Assertions.assertNotNull(statisticsData.percentile95());
         Assertions.assertNotNull(statisticsData.frequentlyRequestResources());
         Assertions.assertNotNull(statisticsData.frequentlyStatusCode());

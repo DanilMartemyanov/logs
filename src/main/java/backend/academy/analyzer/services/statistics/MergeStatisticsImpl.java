@@ -1,4 +1,13 @@
 package backend.academy.analyzer.services.statistics;
 
-public class MergeStatisticsImpl {
+import java.nio.file.Path;
+
+public class MergeStatisticsImpl implements MergeStatistics {
+    @Override
+    public StatisticsData merge(String pathDirectory) {
+        Path path  = Path.of(pathDirectory);
+
+
+        return null;
+    }
 }

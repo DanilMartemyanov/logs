@@ -4,6 +4,7 @@ import backend.academy.analyzer.models.LogRecord;
 import com.google.common.math.Quantiles;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -67,12 +68,13 @@ public class CalculatingStatisticsImpl implements CalculatingStatistics {
     private static Map<String, Long> getSortedMap(Map<String, Long> frequentlyRequests) {
         return frequentlyRequests.entrySet()
             .stream()
-            .sorted(Map.Entry.comparingByValue())
+            .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+            .limit(3)
             .collect(Collectors.toMap(
                 Map.Entry::getKey,
                 Map.Entry::getValue,
                 (e1, e2) -> e1,
-                TreeMap::new
+                LinkedHashMap::new
             ));
     }
 }

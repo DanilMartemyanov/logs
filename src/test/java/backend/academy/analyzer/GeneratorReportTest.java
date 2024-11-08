@@ -11,7 +11,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 import static org.mockito.Mockito.when;
@@ -37,9 +39,12 @@ public class GeneratorReportTest {
         GeneratorReport generatorReport = new GeneratorReportImpl();
         DateFormatter dateFormatter = new DateFormatterImpl();
         ZonedDateTime from = dateFormatter.formatStringToDate("17/May/2015:08:05:32 +0000", PatternConstant.PATTERNZONE);
-        Report report = new Report("log1", statisticsData, from, null);
+        List<String> fileNames = new ArrayList<>();
+        fileNames.add("log1");
+        fileNames.add("log2");
+        Report report = new Report(fileNames, statisticsData, from, null);
         String reportString  = generatorReport.generateReportFormatMarkdown(report);
-
+        System.out.println(reportString);
         Assertions.assertNotNull(reportString);
     }
 }

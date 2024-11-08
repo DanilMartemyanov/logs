@@ -1,13 +1,11 @@
 package backend.academy.report.services.implementations;
 
-import backend.academy.analyzer.services.statistics.StatisticsData;
 import backend.academy.report.models.Report;
 import backend.academy.report.services.interfaces.GeneratorReport;
 import lombok.extern.log4j.Log4j2;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.ZonedDateTime;
 
 @Log4j2
 public class GeneratorReportImpl implements GeneratorReport {
@@ -19,9 +17,9 @@ public class GeneratorReportImpl implements GeneratorReport {
         }else {
             toDate = report.to().toString();
         }
-        StringBuilder reportMarkDoqn = new StringBuilder();
+        StringBuilder reportMarkDown = new StringBuilder();
 
-        reportMarkDoqn.append("#### Общая информация\n\n")
+        reportMarkDown.append("#### Общая информация\n\n")
             .append("|        Метрика        |                Значение                |\n")
             .append("|:---------------------:|:--------------------------------------:|\n")
             .append("|       Файл(-ы)        | ").append(String.format("%39s",report.fileName())).append("|\n")
@@ -32,34 +30,34 @@ public class GeneratorReportImpl implements GeneratorReport {
             .append("|   95p размера ответа  | ").append(String.format("%38f", report.data().percentile95())).append("b|\n\n");
 
         // Запрашиваемые ресурсы
-        reportMarkDoqn.append("#### Запрашиваемые ресурсы\n\n")
-            .append("|     Ресурс      | Количество  |\n")
-            .append("|:---------------:|------------:|\n");
+        reportMarkDown.append("#### Запрашиваемые ресурсы\n\n")
+            .append("|     Ресурс             | Количество       |\n")
+            .append("|:----------------------:|-----------------:|\n");
 
         report.data().frequentlyRequestResources().forEach((resource, count) -> {
-            reportMarkDoqn.append("| ").append(String.format(" %-15s", resource))
-                .append("| ").append(String.format("  %10d", count))
+            reportMarkDown.append("| ").append(String.format("%-23s", resource))
+                .append("| ").append(String.format("%17d", count))
                 .append("|\n");
         });
 
-        reportMarkDoqn.append("\n#### Коды ответа\n\n")
+        reportMarkDown.append("\n#### Коды ответа\n\n")
             .append("| Код |          Имя          | Количество  |\n")
             .append("|:---:|:---------------------:|------------:|\n");
 
         report.data().frequentlyStatusCode().forEach((code, count) -> {
-            reportMarkDoqn.append("| ").append(String.format("%-3s", code))
+            reportMarkDown.append("| ").append(String.format("%-3s", code))
                 .append(" | ").append(String.format("%-21s", HttpStatusHelper.getHttpStatusName(code)))
                 .append(" | ").append(String.format("  %10d", count))
                 .append("|\n");
         });
 
-        return reportMarkDoqn.toString();
+        return reportMarkDown.toString();
     }
 
     public void writeReportToFile(Report report, String userPath) {
         Path path = Path.of(userPath);
-        String reportInFile = this.generateReportFormatMarkdown(report);
         try {
+            String reportInFile = generateReportFormatMarkdown(report);
             Files.writeString(path, reportInFile);
             log.info("Report generated successfully at: " + path);
         } catch (IOException e) {

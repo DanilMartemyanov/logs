@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UncheckedIOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
@@ -29,10 +30,8 @@ public class ReaderImpl implements Reader {
 
     @Override
     public Stream<LogRecord> readFile(String userPath) {
-        Path path = Path.of(userPath) ;
         try {
-
-            return getStreamRecordFromStreamString(Files.lines(path));
+            return getStreamRecordFromStreamString(readAllFilesInDirectory(userPath));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -74,5 +73,17 @@ public class ReaderImpl implements Reader {
                 }
             })
             .filter(logDto -> logDto != null);
+    }
+
+    public static Stream<String> readAllFilesInDirectory(String dirPath) throws IOException {
+        return Files.walk(Path.of(dirPath))
+            .filter(Files::isRegularFile)
+            .flatMap(path -> {
+                try {
+                    return Files.lines(path);
+                } catch (IOException e) {
+                    throw new UncheckedIOException(e);
+                }
+            });
     }
 }
