@@ -1,7 +1,10 @@
 package backend.academy.analyzer.services.statistics;
 
 import backend.academy.analyzer.models.LogRecord;
+import com.google.common.math.Quantiles;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -20,6 +23,8 @@ public class CalculatingStatisticsImpl implements CalculatingStatistics {
         long[] totalRequests = {0};
         long[] totalResponseSize = {0};
         double averageResponseServer;
+        double percentile95;
+        List<Long> sizeResponseServer = new ArrayList<>();
 
         logs.forEach(logRecord -> {
             totalRequests[0]++;
@@ -33,20 +38,27 @@ public class CalculatingStatisticsImpl implements CalculatingStatistics {
 
             long responseSize = Long.parseLong(logRecord.bodyByteSent());
             totalResponseSize[0] += responseSize;
+            sizeResponseServer.add(responseSize);
 
         });
 
         if (totalRequests[0] > 0){
+            sizeResponseServer.sort(Long::compare);
+            percentile95 = Quantiles.percentiles().index(95).compute(sizeResponseServer);
             averageResponseServer = totalResponseSize[0] / (double) totalRequests[0];
         }else {
             averageResponseServer = 0;
+            percentile95 = 0;
         }
+
+
 
         return new StatisticsData(
             getSortedMap(frequentlyRequestResources),
             getSortedMap(frequentlyStatusCode),
             totalRequests[0],
-            averageResponseServer
+            averageResponseServer,
+            percentile95
         );
 
     }

@@ -6,7 +6,7 @@ public record StatisticsData(
     Map<String, Long> frequentlyRequestResources,
     Map<String, Long> frequentlyStatusCode,
     long totalRequests,
-    double averageResponseServer
-){
-
+    double averageResponseServer,
+    double percentile95
+) {
 }
