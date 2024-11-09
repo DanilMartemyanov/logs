@@ -36,6 +36,6 @@ public class WriteReporttoFileTest {
         Report report = new Report(fileNames,
             calculatingStatistics.getStatistic(logs, ZonedDateTime.parse("2015-05-17T08:05:32Z"),
                 Optional.ofNullable(null)));
-        generatorReport.writeReportToFile(report, generatorReport);
+        generatorReport.writeReportToFile(report, generatorReport, "md");
     }
 }

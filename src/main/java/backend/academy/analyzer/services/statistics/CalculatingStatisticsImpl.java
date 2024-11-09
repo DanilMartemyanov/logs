@@ -2,6 +2,7 @@ package backend.academy.analyzer.services.statistics;
 
 import backend.academy.analyzer.models.LogRecord;
 import com.google.common.math.Quantiles;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @SuppressWarnings("checkstyle:MagicNumber")
+@SuppressFBWarnings("NAB_NEEDLESS_BOOLEAN_CONSTANT_CONVERSION")
 public class CalculatingStatisticsImpl implements CalculatingStatistics {
 
     @Override
@@ -27,8 +29,8 @@ public class CalculatingStatisticsImpl implements CalculatingStatistics {
 
         logs.filter(logRecord -> {
                 ZonedDateTime logDate = logRecord.timeLocal();
-                return (logDate.isAfter(from) || logDate.isEqual(from)) &&
-                    (!to.isPresent() || logDate.isBefore(to.get()) || logDate.isEqual(to.get()));
+                return (logDate.isAfter(from) || logDate.isEqual(from))
+                    && (to.map(end -> logDate.isBefore(end) || logDate.isEqual(end)).orElse(true));
             })
             .forEach(logRecord -> {
                 totalRequests[0]++;

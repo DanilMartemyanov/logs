@@ -1,5 +1,6 @@
 package backend.academy.report;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,8 +11,11 @@ import java.util.stream.Stream;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
+@SuppressFBWarnings("PATH_TRAVERSAL_IN")
 public class FileManager {
+
     public static List<String> getFileNamesInDirectory(String directoryPath) {
+
         try (Stream<Path> paths = Files.list(Paths.get(directoryPath))) {
             return paths
                 .filter(Files::isRegularFile)

@@ -34,6 +34,7 @@ public class GeneratorReportTest {
         when(statisticsData.percentile95()).thenReturn(2956.0);
         when(statisticsData.totalRequests()).thenReturn(19137L);
         when(statisticsData.averageResponseServer()).thenReturn(23331.0);
+        when(statisticsData.from()).thenReturn(ZonedDateTime.now());
         GeneratorReport generatorReport = new GeneratorReportImpl();
         DateFormatter dateFormatter = new DateFormatterImpl();
         ZonedDateTime from = dateFormatter.formatStringToDate("17/May/2015:08:05:32 +0000", PatternConstant.PATTERNZONE);
