@@ -13,8 +13,11 @@ import backend.academy.analyzer.services.statistics.CalculatingStatisticsImpl;
 import backend.academy.report.FileManager;
 import backend.academy.report.models.Report;
 import backend.academy.report.services.implementations.GeneratorReportImpl;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -37,5 +40,8 @@ public class WriteReporttoFileTest {
             calculatingStatistics.getStatistic(logs, ZonedDateTime.parse("2015-05-17T08:05:32Z"),
                 Optional.ofNullable(null)));
         generatorReport.writeReportToFile(report, generatorReport, "md");
+        Path path = Paths.get("src/main/resources/results/resultAnalyze.md");
+        Assertions.assertNotNull(path);
+
     }
 }
