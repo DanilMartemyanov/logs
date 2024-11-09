@@ -11,19 +11,21 @@ import java.nio.file.Path;
 public class GeneratorReportImpl implements GeneratorReport {
     @Override
     public String generateReportFormatMarkdown(Report report) {
-        String toDate;
-        if(report.to() == null){
-            toDate = "-";
-        }else {
-            toDate = report.to().toString();
-        }
+
         StringBuilder reportMarkDown = new StringBuilder();
+
+        String toDate;
+        if(report.data().to().isPresent()){
+            toDate = report.data().to().toString();
+        }else {
+            toDate = "-";
+        }
 
         reportMarkDown.append("#### Общая информация\n\n")
             .append("|        Метрика        |                Значение                |\n")
             .append("|:---------------------:|:--------------------------------------:|\n")
             .append("|       Файл(-ы)        | ").append(String.format("%39s",report.fileName())).append("|\n")
-            .append("|    Начальная дата     | ").append(String.format("%39s",report.from().toString())).append("|\n")
+            .append("|    Начальная дата     | ").append(String.format("%39s",report.data().from().toString())).append("|\n")
             .append("|     Конечная дата     | ").append(String.format("%39s",toDate)).append("|\n")
             .append("|  Количество запросов  | ").append(String.format("%39d", report.data().totalRequests())).append("|\n")
             .append("| Средний размер ответа | ").append(String.format("%38f", report.data().averageResponseServer())).append("b|\n")

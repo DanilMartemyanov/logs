@@ -42,7 +42,7 @@ public class GeneratorReportTest {
         List<String> fileNames = new ArrayList<>();
         fileNames.add("log1");
         fileNames.add("log2");
-        Report report = new Report(fileNames, statisticsData, from, null);
+        Report report = new Report(fileNames, statisticsData);
         String reportString  = generatorReport.generateReportFormatMarkdown(report);
         System.out.println(reportString);
         Assertions.assertNotNull(reportString);

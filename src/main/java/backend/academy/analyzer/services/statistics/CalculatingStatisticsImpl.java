@@ -2,23 +2,22 @@ package backend.academy.analyzer.services.statistics;
 
 import backend.academy.analyzer.models.LogRecord;
 import com.google.common.math.Quantiles;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CalculatingStatisticsImpl implements CalculatingStatistics {
-    @Override
-    public int getCountsRequest(Stream<LogRecord> logs) {
-        return logs.toList().size();
-    }
+
 
     @Override
-    public StatisticsData getStatistic(Stream<LogRecord> logs) {
+    public StatisticsData getStatistic(Stream<LogRecord> logs, ZonedDateTime from, Optional<ZonedDateTime> to) {
         Map<String, Long> frequentlyRequestResources = new HashMap<>();
         Map<String, Long> frequentlyStatusCode = new HashMap<>();
         long[] totalRequests = {0};
@@ -27,7 +26,12 @@ public class CalculatingStatisticsImpl implements CalculatingStatistics {
         double percentile95;
         List<Long> sizeResponseServer = new ArrayList<>();
 
-        logs.forEach(logRecord -> {
+        logs.filter(logRecord -> {
+                ZonedDateTime logDate = logRecord.timeLocal();
+                return (logDate.isAfter(from) || logDate.isEqual(from)) &&
+                    to.map(end -> logDate.isBefore(end) || logDate.isEqual(end)).orElse(true);
+            })
+            .forEach(logRecord -> {
             totalRequests[0]++;
 
 
@@ -59,7 +63,9 @@ public class CalculatingStatisticsImpl implements CalculatingStatistics {
             getSortedMap(frequentlyStatusCode),
             totalRequests[0],
             averageResponseServer,
-            percentile95
+            percentile95,
+            from,
+            to
         );
 
     }

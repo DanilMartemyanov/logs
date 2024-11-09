@@ -9,13 +9,11 @@ import java.util.List;
 public class Report {
     private List<String> fileName;
     private StatisticsData data;
-    private ZonedDateTime from;
-    private ZonedDateTime to;
 
-    public Report(List<String> fileName, StatisticsData data, ZonedDateTime from, ZonedDateTime to) {
+
+    public Report(List<String> fileName, StatisticsData data) {
         this.fileName = fileName;
         this.data = data;
-        this.from = from;
-        this.to = to;
+
     }
 }
