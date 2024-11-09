@@ -10,7 +10,7 @@ public class PatternConstant {
             + "(?<requestType>\\S+)\\s(?<pathResources>[^\\s]+)\\sHTTP/\\d\\.\\d\"\\s(?<statusCode>\\d{3})\\s"
             + "(?<bodyBytesSent>\\d+)\\s\"(?<referer>[^\"]*)\"\\s\"(?<userAgent>[^\"]*)\"";
     public static final String PATTERNZONE = "dd/MMM/yyyy:HH:mm:ss Z";
-    public static final String PATTERNZONEUTC = "dd MMMM yyyy HH:mm:ss z";
+    public static final String PATTERNUSERDATE = "dd/MMM/yyyy";
     public static final int REMOTEADDRESS = 1;
     public static final int REMOTEUSER = 2;
     public static final int TIMELOCAL = 3;

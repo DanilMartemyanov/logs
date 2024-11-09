@@ -1,6 +1,10 @@
 package backend.academy.analyzer.services.formatters;
 
+import backend.academy.analyzer.constant.PatternConstant;
 import backend.academy.analyzer.services.interfaces.DateFormatter;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -17,6 +21,12 @@ public class DateFormatterImpl implements DateFormatter {
             log.error(e.getMessage());
             return null;
         }
+    }
+
+    public ZonedDateTime convertToISO(String date){
+        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern(PatternConstant.PATTERNUSERDATE));
+        ZonedDateTime zonedDateTime = localDate.atStartOfDay(ZoneOffset.UTC);
+        return zonedDateTime;
     }
 
 }

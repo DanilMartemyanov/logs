@@ -56,10 +56,10 @@ public class GeneratorReportImpl implements GeneratorReport {
         return reportMarkDown.toString();
     }
 
-    public void writeReportToFile(Report report, String userPath) {
+    public static void writeReportToFile(Report report, String userPath, GeneratorReport generatorReport ) {
         Path path = Path.of(userPath);
         try {
-            String reportInFile = generateReportFormatMarkdown(report);
+            String reportInFile = generatorReport.generateReportFormatMarkdown(report);
             Files.writeString(path, reportInFile);
             log.info("Report generated successfully at: " + path);
         } catch (IOException e) {
