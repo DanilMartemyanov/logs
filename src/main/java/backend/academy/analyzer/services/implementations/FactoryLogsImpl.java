@@ -1,5 +1,6 @@
 package backend.academy.analyzer.services.implementations;
 
+import backend.academy.analyzer.constant.NginxParametrs;
 import backend.academy.analyzer.constant.PatternConstant;
 import backend.academy.analyzer.models.LogRecord;
 import backend.academy.analyzer.services.formatters.DateFormatterImpl;
@@ -26,16 +27,16 @@ public class FactoryLogsImpl implements FactoryLog {
         LogRecord logRecord = null;
         if (matcher.find()) {
             logRecord = LogRecord.builder()
-                .remoteAddress(findMatchByGroup(PatternConstant.REMOTEADDRESS))
-                .remoteUser(findMatchByGroup(PatternConstant.REMOTEUSER))
+                .remoteAddress(findMatchByGroup(NginxParametrs.REMOTEADDRESS.value()))
+                .remoteUser(findMatchByGroup(NginxParametrs.REMOTEUSER.value()))
                 .timeLocal(dateFormatter.formatStringToDate(
-                    findMatchByGroup(PatternConstant.TIMELOCAL), PatternConstant.PATTERNZONE))
-                .requestType(findMatchByGroup(PatternConstant.REQUESTTYPE))
-                .statusCode(findMatchByGroup(PatternConstant.STATUSCODE))
-                .pathResources(findMatchByGroup(PatternConstant.PATHRESOURCES))
-                .bodyByteSent(findMatchByGroup(PatternConstant.BODYBYTESSENT))
-                .httpRefer(findMatchByGroup(PatternConstant.REFER))
-                .httpUserAgent(findMatchByGroup(PatternConstant.USERAGENT))
+                    findMatchByGroup(NginxParametrs.TIMELOCAL.value()), PatternConstant.PATTERNZONE))
+                .requestType(findMatchByGroup(NginxParametrs.REQUESTTYPE.value()))
+                .statusCode(findMatchByGroup(NginxParametrs.STATUSCODE.value()))
+                .pathResources(findMatchByGroup(NginxParametrs.PATHRESOURCES.value()))
+                .bodyByteSent(findMatchByGroup(NginxParametrs.BODYBYTESSENT.value()))
+                .httpRefer(findMatchByGroup(NginxParametrs.REFER.value()))
+                .httpUserAgent(findMatchByGroup(NginxParametrs.USERAGENT.value()))
                 .build();
         }
 
