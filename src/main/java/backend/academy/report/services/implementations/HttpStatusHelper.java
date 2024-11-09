@@ -1,9 +1,9 @@
 package backend.academy.report.services.implementations;
 
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class HttpStatusHelper {
 
     public static String getHttpStatusName(String statusCode) {

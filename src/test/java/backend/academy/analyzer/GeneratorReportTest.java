@@ -15,11 +15,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 import static org.mockito.Mockito.when;
 
 public class GeneratorReportTest {
-
     @Test
     void generateReportMarkdown() {
         StatisticsData statisticsData = Mockito.mock(StatisticsData.class);
@@ -44,7 +42,6 @@ public class GeneratorReportTest {
         fileNames.add("log2");
         Report report = new Report(fileNames, statisticsData);
         String reportString  = generatorReport.generateReportFormatMarkdown(report);
-        System.out.println(reportString);
         Assertions.assertNotNull(reportString);
     }
 }

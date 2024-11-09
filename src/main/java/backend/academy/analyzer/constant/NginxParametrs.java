@@ -1,8 +1,6 @@
 package backend.academy.analyzer.constant;
 
 import lombok.Getter;
-import lombok.Setter;
-import org.checkerframework.checker.units.qual.N;
 
 @Getter
 public enum NginxParametrs {

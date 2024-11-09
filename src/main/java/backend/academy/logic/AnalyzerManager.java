@@ -1,10 +1,8 @@
 package backend.academy.logic;
 
 import backend.academy.analyzer.models.LogRecord;
-import backend.academy.analyzer.services.formatters.DateFormatterImpl;
 import backend.academy.analyzer.services.implementations.FactoryLogsImpl;
 import backend.academy.analyzer.services.implementations.ReaderImpl;
-import backend.academy.analyzer.services.interfaces.DateFormatter;
 import backend.academy.analyzer.services.interfaces.FactoryLog;
 import backend.academy.analyzer.services.interfaces.Reader;
 import backend.academy.analyzer.services.statistics.CalculatingStatistics;
@@ -28,7 +26,7 @@ public class AnalyzerManager {
     private CalculatingStatistics calculatingStatistics = new CalculatingStatisticsImpl();
     private List<String> fileNames;
 
-    public void analyzeLogFile(String pathLog, ZonedDateTime from, ZonedDateTime to) {
+    public void analyzeLogFile(String pathLog, ZonedDateTime from, ZonedDateTime to, String format) {
         Stream<LogRecord> logRecords;
         if (pathLog.startsWith("http")) {
             HttpClient client = HttpClient.newHttpClient();
@@ -43,6 +41,6 @@ public class AnalyzerManager {
         Report report =
             new Report(fileNames, calculatingStatistics.getStatistic(logRecords, from, Optional.ofNullable(to)));
 
-        GeneratorReportImpl.writeReportToFile(report, generatorReport);
+        GeneratorReportImpl.writeReportToFile(report, generatorReport, format);
     }
 }

@@ -1,10 +1,11 @@
 package backend.academy;
 
-import java.text.ParseException;
-import java.time.ZonedDateTime;
+
 import backend.academy.analyzer.services.formatters.DateFormatterImpl;
 import backend.academy.logic.AnalyzerManager;
 import backend.academy.logic.CommandLineArgs;
+import java.text.ParseException;
+import java.time.ZonedDateTime;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -20,7 +21,8 @@ public class Main {
         String path  = userArgs.path();
         ZonedDateTime from = DateFormatterImpl.convertToISO(userArgs.from());
         ZonedDateTime to = null;
-
-        manager.analyzeLogFile("https://raw.githubusercontent.com/elastic/examples/master/Common%20Data%20Formats/nginx_logs/nginx_logs", from, to);
+        String format = userArgs.format();
+// "https://raw.githubusercontent.com/elastic/examples/master/Common%20Data%20Formats/nginx_logs/nginx_logs"
+        manager.analyzeLogFile(path, from, to, format);
     }
 }

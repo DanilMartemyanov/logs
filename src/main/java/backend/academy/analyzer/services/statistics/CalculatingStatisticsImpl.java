@@ -9,12 +9,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@SuppressWarnings("checkstyle:MagicNumber")
 public class CalculatingStatisticsImpl implements CalculatingStatistics {
-
 
     @Override
     public StatisticsData getStatistic(Stream<LogRecord> logs, ZonedDateTime from, Optional<ZonedDateTime> to) {
@@ -29,34 +28,29 @@ public class CalculatingStatisticsImpl implements CalculatingStatistics {
         logs.filter(logRecord -> {
                 ZonedDateTime logDate = logRecord.timeLocal();
                 return (logDate.isAfter(from) || logDate.isEqual(from)) &&
-                    to.map(end -> logDate.isBefore(end) || logDate.isEqual(end)).orElse(true);
+                    (!to.isPresent() || logDate.isBefore(to.get()) || logDate.isEqual(to.get()));
             })
             .forEach(logRecord -> {
-            totalRequests[0]++;
+                totalRequests[0]++;
 
+                frequentlyRequestResources.merge(logRecord.pathResources(), 1L, Long::sum);
 
-            frequentlyRequestResources.merge(logRecord.pathResources(), 1L, Long::sum);
+                frequentlyStatusCode.merge(logRecord.statusCode(), 1L, Long::sum);
 
+                long responseSize = Long.parseLong(logRecord.bodyByteSent());
+                totalResponseSize[0] += responseSize;
+                sizeResponseServer.add(responseSize);
 
-            frequentlyStatusCode.merge(logRecord.statusCode(), 1L, Long::sum);
+            });
 
-
-            long responseSize = Long.parseLong(logRecord.bodyByteSent());
-            totalResponseSize[0] += responseSize;
-            sizeResponseServer.add(responseSize);
-
-        });
-
-        if (totalRequests[0] > 0){
+        if (totalRequests[0] > 0) {
             sizeResponseServer.sort(Long::compare);
             percentile95 = Quantiles.percentiles().index(95).compute(sizeResponseServer);
             averageResponseServer = totalResponseSize[0] / (double) totalRequests[0];
-        }else {
+        } else {
             averageResponseServer = 0;
             percentile95 = 0;
         }
-
-
 
         return new StatisticsData(
             getSortedMap(frequentlyRequestResources),
@@ -69,7 +63,6 @@ public class CalculatingStatisticsImpl implements CalculatingStatistics {
         );
 
     }
-
 
     private static Map<String, Long> getSortedMap(Map<String, Long> frequentlyRequests) {
         return frequentlyRequests.entrySet()

@@ -17,6 +17,9 @@ public class CommandLineArgs {
     @Parameter(names = "--to", description = "End date (format: yyyy/MM/dd)")
     private String to;
 
+    @Parameter(names = "--format", description = "md|adoc")
+    private String format;
+
     public static CommandLineArgs parseArguments(String[] args) {
         CommandLineArgs cmdArgs = new CommandLineArgs();
         JCommander jCommander = JCommander.newBuilder()

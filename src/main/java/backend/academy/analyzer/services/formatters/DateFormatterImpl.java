@@ -3,7 +3,6 @@ package backend.academy.analyzer.services.formatters;
 import backend.academy.analyzer.constant.PatternConstant;
 import backend.academy.analyzer.services.interfaces.DateFormatter;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,7 +22,7 @@ public class DateFormatterImpl implements DateFormatter {
         }
     }
 
-    public static ZonedDateTime convertToISO(String date){
+    public static ZonedDateTime convertToISO(String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(PatternConstant.PATTERNUSERDATE, Locale.ENGLISH);
 
         LocalDate localDate = LocalDate.parse(date, formatter);

@@ -23,7 +23,6 @@ import lombok.extern.log4j.Log4j2;
 public class ReaderImpl implements Reader {
     private FactoryLog factoryLog;
 
-
     public ReaderImpl(FactoryLog factoryLog) {
         this.factoryLog = factoryLog;
     }
@@ -43,16 +42,17 @@ public class ReaderImpl implements Reader {
         return getStreamRecordFromStreamString(response.lines());
     }
 
-    public  BufferedReader getResponseServer(String url, HttpClient httpClient) {
+    public BufferedReader getResponseServer(String url, HttpClient httpClient) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(url))
                 .GET()
                 .build();
             HttpResponse<InputStream> response = httpClient.send(request, HttpResponse.BodyHandlers.ofInputStream());
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.body(), StandardCharsets.UTF_8));
+            BufferedReader bufferedReader =
+                new BufferedReader(new InputStreamReader(response.body(), StandardCharsets.UTF_8));
             return bufferedReader;
-        }catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException("Ошибка ввода-вывода при отправке запроса: " + e.getMessage(), e);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -62,7 +62,7 @@ public class ReaderImpl implements Reader {
         }
     }
 
-    private Stream<LogRecord> getStreamRecordFromStreamString(Stream<String> stream){
+    private Stream<LogRecord> getStreamRecordFromStreamString(Stream<String> stream) {
         return stream
             .map(line -> {
                 try {

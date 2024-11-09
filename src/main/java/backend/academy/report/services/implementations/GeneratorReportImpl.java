@@ -2,12 +2,13 @@ package backend.academy.report.services.implementations;
 
 import backend.academy.report.models.Report;
 import backend.academy.report.services.interfaces.GeneratorReport;
-import lombok.extern.log4j.Log4j2;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
+@SuppressWarnings("checkstyle:MultipleStringLiterals")
 public class GeneratorReportImpl implements GeneratorReport {
     @Override
     public String generateReportFormatMarkdown(Report report) {
@@ -15,21 +16,25 @@ public class GeneratorReportImpl implements GeneratorReport {
         StringBuilder reportMarkDown = new StringBuilder();
 
         String toDate;
-        if(report.data().to().isPresent()){
+        if (report.data().to().isPresent()) {
             toDate = report.data().to().toString();
-        }else {
+        } else {
             toDate = "-";
         }
 
         reportMarkDown.append("#### Общая информация\n\n")
             .append("|        Метрика        |                Значение                |\n")
             .append("|:---------------------:|:--------------------------------------:|\n")
-            .append("|       Файл(-ы)        | ").append(String.format("%39s",report.fileName())).append("|\n")
-            .append("|    Начальная дата     | ").append(String.format("%39s",report.data().from().toString())).append("|\n")
-            .append("|     Конечная дата     | ").append(String.format("%39s",toDate)).append("|\n")
-            .append("|  Количество запросов  | ").append(String.format("%39d", report.data().totalRequests())).append("|\n")
-            .append("| Средний размер ответа | ").append(String.format("%38f", report.data().averageResponseServer())).append("b|\n")
-            .append("|   95p размера ответа  | ").append(String.format("%38f", report.data().percentile95())).append("b|\n\n");
+            .append("|       Файл(-ы)        | ").append(String.format("%39s", report.fileName())).append("|\n")
+            .append("|    Начальная дата     | ").append(String.format("%39s", report.data().from().toString()))
+            .append("|\n")
+            .append("|     Конечная дата     | ").append(String.format("%39s", toDate)).append("|\n")
+            .append("|  Количество запросов  | ").append(String.format("%39d", report.data().totalRequests()))
+            .append("|\n")
+            .append("| Средний размер ответа | ").append(String.format("%38f", report.data().averageResponseServer()))
+            .append("b|\n")
+            .append("|   95p размера ответа  | ").append(String.format("%38f", report.data().percentile95()))
+            .append("b|\n\n");
 
         // Запрашиваемые ресурсы
         reportMarkDown.append("#### Запрашиваемые ресурсы\n\n")
@@ -56,8 +61,8 @@ public class GeneratorReportImpl implements GeneratorReport {
         return reportMarkDown.toString();
     }
 
-    public static void writeReportToFile(Report report, GeneratorReport generatorReport ) {
-        Path path = Path.of("src/main/resources/results/resulAnalyze.md");
+    public static void writeReportToFile(Report report, GeneratorReport generatorReport, String format) {
+        Path path = Path.of("src/main/resources/results/resultAnalyze." + format);
         try {
             String reportInFile = generatorReport.generateReportFormatMarkdown(report);
             Files.writeString(path, reportInFile);
