@@ -23,7 +23,7 @@ public class CalculatingStatisticsTest {
         Stream<LogRecord> logRecordStream = reader.readFile(link);
         CalculatingStatistics calculatingStatistics = new CalculatingStatisticsImpl();
         StatisticsData statisticsData = calculatingStatistics.getStatistic(logRecordStream, ZonedDateTime.parse("2015-05-17T08:05:32Z"),
-            Optional.ofNullable(null));
+            Optional.empty());
         System.out.println(statisticsData.totalRequests());
         Assertions.assertNotNull(statisticsData.percentile95());
         Assertions.assertNotNull(statisticsData.frequentlyRequestResources());
