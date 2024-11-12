@@ -2,7 +2,8 @@ package backend.academy.analyzer;
 
 import backend.academy.analyzer.models.LogRecord;
 import backend.academy.analyzer.services.implementations.FactoryLogsImpl;
-import backend.academy.analyzer.services.implementations.ReaderImpl;
+import backend.academy.analyzer.services.implementations.ReaderFile;
+import backend.academy.analyzer.services.implementations.ReaderUrl;
 import backend.academy.analyzer.services.interfaces.FactoryLog;
 import backend.academy.analyzer.services.interfaces.Reader;
 import org.junit.jupiter.api.Assertions;
@@ -34,8 +35,8 @@ public class ReaderTest {
     @Test
     void readFileTest(){
         FactoryLog factoryLog = new FactoryLogsImpl();
-        Reader reader = new ReaderImpl(factoryLog);
-        Stream<LogRecord> logs = reader.readFile("src/main/resources/logs/");
+        Reader reader = new ReaderFile(factoryLog);
+        Stream<LogRecord> logs = reader.read("src/main/resources/logs/");
         Assertions.assertNotNull(logs);
 
     }
@@ -49,9 +50,9 @@ public class ReaderTest {
             .thenReturn(mockHttpResponse);
         when(mockHttpResponse.body()).thenReturn(mockInputStream);
 
-        Reader logReader = new ReaderImpl(new FactoryLogsImpl());
+        ReaderUrl logReader = new ReaderUrl( HttpClient.newHttpClient(), new FactoryLogsImpl());
 
-        try (BufferedReader reader = logReader.getResponseServer("http://example.com/logs", mockHttpClient)) {
+        try (BufferedReader reader = logReader.getResponseServer("http://example.com/logs")) {
             Assertions.assertEquals("log line 1", reader.readLine());
         }
 
@@ -59,23 +60,22 @@ public class ReaderTest {
 
     @Test
     void readLogsByURLTest() throws IOException, InterruptedException {
-        Reader logReader = new ReaderImpl(new FactoryLogsImpl());
+        Reader logReader = new ReaderUrl(HttpClient.newHttpClient(),new FactoryLogsImpl());
         String log = "93.180.71.3 - - [17/May/2015:08:05:32 +0000] \"GET /downloads/product_1 HTTP/1.1\" 304 0 \"-\" \"Debian APT-HTTP/1.3 (0.8.16~exp12ubuntu10.21)\"";
         InputStream mockInputStream = new ByteArrayInputStream(log.getBytes());
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(mockInputStream));
         when(mockHttpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
             .thenReturn(mockHttpResponse);
         when(mockHttpResponse.body()).thenReturn(mockInputStream);
-        Stream<LogRecord> logs =  logReader.readLogsByURL("http://example.com/logs", mockHttpClient);
+        Stream<LogRecord> logs =  logReader.read("http://example.com/logs");
         Assertions.assertNotNull(logs);
     }
 
     @Test
     void readLogsTest(){
-        Reader logReader = new ReaderImpl(new FactoryLogsImpl());
+        Reader logReader = new ReaderUrl(HttpClient.newHttpClient(),new FactoryLogsImpl());
         String link = "https://raw.githubusercontent.com/elastic/examples/master/Common%20Data%20Formats/nginx_logs/nginx_logs";
-        HttpClient httpClient = HttpClient.newHttpClient();
-        Stream<LogRecord> logs = logReader.readLogsByURL(link, httpClient);
+        Stream<LogRecord> logs = logReader.read(link);
         Assertions.assertNotNull(logs);
     }
 }

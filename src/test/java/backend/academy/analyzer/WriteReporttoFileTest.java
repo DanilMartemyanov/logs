@@ -4,7 +4,7 @@ import backend.academy.analyzer.constant.PatternConstant;
 import backend.academy.analyzer.models.LogRecord;
 import backend.academy.analyzer.services.formatters.DateFormatterImpl;
 import backend.academy.analyzer.services.implementations.FactoryLogsImpl;
-import backend.academy.analyzer.services.implementations.ReaderImpl;
+import backend.academy.analyzer.services.implementations.ReaderFile;
 import backend.academy.analyzer.services.interfaces.DateFormatter;
 import backend.academy.analyzer.services.interfaces.FactoryLog;
 import backend.academy.analyzer.services.interfaces.Reader;
@@ -28,8 +28,8 @@ public class WriteReporttoFileTest {
     void writeReportToFile() throws IOException {
         GeneratorReportImpl generatorReport = new GeneratorReportImpl();
         FactoryLog factoryLog = new FactoryLogsImpl();
-        Reader reader = new ReaderImpl(factoryLog);
-        Stream<LogRecord> logs = reader.readFile("src/main/resources/logs/");
+        Reader reader = new ReaderFile(factoryLog);
+        Stream<LogRecord> logs = reader.read("src/main/resources/logs/");
         List<String> fileNames = FileManager.getFileNamesInDirectory("src/main/resources/logs/");
 
         CalculatingStatistics calculatingStatistics = new CalculatingStatisticsImpl();

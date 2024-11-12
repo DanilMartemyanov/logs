@@ -1,14 +1,36 @@
 package backend.academy.analyzer.services.interfaces;
 
 import backend.academy.analyzer.models.LogRecord;
-import java.io.BufferedReader;
-import java.net.http.HttpClient;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.stream.Stream;
 
 public interface Reader {
-    Stream<LogRecord> readFile(String path);
+    Stream<LogRecord> read(String path);
 
-    Stream<LogRecord> readLogsByURL(String url, HttpClient httpClient);
+    default Stream<LogRecord> getStreamRecordFromStreamString(Stream<String> stream, FactoryLog factoryLog) {
+        return stream
+            .map(line -> {
+                try {
+                    return factoryLog.createLogDto(line);
+                } catch (Exception ex) {
+                    return null;
+                }
+            })
+            .filter(logDto -> logDto != null);
+    }
 
-    BufferedReader getResponseServer(String url, HttpClient httpClient);
+    default Stream<String> readAllFilesInDirectory(String dirPath) throws IOException {
+        return Files.walk(Path.of(dirPath))
+            .filter(Files::isRegularFile)
+            .flatMap(path -> {
+                try {
+                    return Files.lines(path);
+                } catch (IOException e) {
+                    throw new UncheckedIOException(e);
+                }
+            });
+    }
 }
