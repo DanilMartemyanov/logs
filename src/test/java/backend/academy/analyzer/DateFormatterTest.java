@@ -9,7 +9,7 @@ import java.time.ZonedDateTime;
 
 public class DateFormatterTest {
     @Test
-    void getDatefromStringTest(){
+    void getDateformatStringTest(){
         DateFormatter dateFormatter = new DateFormatterImpl();
         String textDate = "17/May/2015:08:05:32 +0000";
         ZonedDateTime zonedDateTime = dateFormatter.formatStringToDate(textDate, PatternConstant.PATTERNZONE);

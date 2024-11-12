@@ -66,7 +66,7 @@ public class GeneratorReportImpl implements GeneratorReport {
         try {
             String reportInFile = generateReport(report);
             Files.writeString(path, reportInFile);
-            log.info("Report generated successfully at: " + path);
+            log.info("Report generated successfully at: {}", path);
         } catch (IOException e) {
             throw new RuntimeException("Failed to write report to file: " + path, e);
         }

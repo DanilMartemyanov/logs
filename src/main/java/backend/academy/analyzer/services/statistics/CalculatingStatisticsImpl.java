@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,8 +23,8 @@ public class CalculatingStatisticsImpl implements CalculatingStatistics {
     public StatisticsData getStatistic(Stream<LogRecord> logs, ZonedDateTime from, Optional<ZonedDateTime> to) {
         Map<String, Long> frequentlyRequestResources = new HashMap<>();
         Map<String, Long> frequentlyStatusCode = new HashMap<>();
-        long[] totalRequests = {0};
-        long[] totalResponseSize = {0};
+        AtomicLong totalRequests = new AtomicLong(0);
+        AtomicLong totalResponseSize = new AtomicLong(0);
         double averageResponseServer;
         double percentile95;
         List<Long> sizeResponseServer = new ArrayList<>();
@@ -34,22 +35,22 @@ public class CalculatingStatisticsImpl implements CalculatingStatistics {
                     && (to.map(end -> logDate.isBefore(end) || logDate.isEqual(end)).orElse(true));
             })
             .forEach(logRecord -> {
-                totalRequests[0]++;
+                totalRequests.incrementAndGet();
 
                 frequentlyRequestResources.merge(logRecord.pathResources(), 1L, Long::sum);
 
                 frequentlyStatusCode.merge(logRecord.statusCode(), 1L, Long::sum);
 
                 long responseSize = Long.parseLong(logRecord.bodyByteSent());
-                totalResponseSize[0] += responseSize;
+                totalResponseSize.addAndGet(responseSize);
                 sizeResponseServer.add(responseSize);
 
             });
 
-        if (totalRequests[0] > 0) {
+        if (totalRequests.get() > 0) {
             sizeResponseServer.sort(Long::compare);
             percentile95 = Quantiles.percentiles().index(PatternConstant.PERCENTILE95).compute(sizeResponseServer);
-            averageResponseServer = totalResponseSize[0] / (double) totalRequests[0];
+            averageResponseServer = totalResponseSize.get() / (double) totalRequests.get();
         } else {
             averageResponseServer = 0;
             percentile95 = 0;
@@ -58,7 +59,7 @@ public class CalculatingStatisticsImpl implements CalculatingStatistics {
         return new StatisticsData(
             getSortedMap(frequentlyRequestResources),
             getSortedMap(frequentlyStatusCode),
-            totalRequests[0],
+            totalRequests.get(),
             averageResponseServer,
             percentile95,
             from,
