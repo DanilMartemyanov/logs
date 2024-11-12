@@ -11,8 +11,8 @@ public class CommandLineArgs {
     @Parameter(names = "--path", description = "Path to the logs", required = true)
     private String path;
 
-    @Parameter(names = "--from", description = "Start date (format: yyyy/MM/dd)", required = true)
-    private String from;
+    @Parameter(names = "--from", description = "Start date (format: yyyy/MM/dd)")
+    private String from = "2015-May-17";
 
     @Parameter(names = "--to", description = "End date (format: yyyy/MM/dd)")
     private String to;

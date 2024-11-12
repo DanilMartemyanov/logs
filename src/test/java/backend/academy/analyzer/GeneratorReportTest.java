@@ -34,7 +34,7 @@ public class GeneratorReportTest {
         when(statisticsData.percentile95()).thenReturn(2956.0);
         when(statisticsData.totalRequests()).thenReturn(19137L);
         when(statisticsData.averageResponseServer()).thenReturn(23331.0);
-        when(statisticsData.from()).thenReturn(ZonedDateTime.now());
+        when(statisticsData.from()).thenReturn(ZonedDateTime.parse("17/May/2015:08:05:32 +0000"));
         GeneratorReport generatorReport = new GeneratorReportImpl();
         DateFormatter dateFormatter = new DateFormatterImpl();
         ZonedDateTime from = dateFormatter.formatStringToDate("17/May/2015:08:05:32 +0000", PatternConstant.PATTERNZONE);
@@ -43,6 +43,33 @@ public class GeneratorReportTest {
         fileNames.add("log2");
         Report report = new Report(fileNames, statisticsData);
         String reportString  = generatorReport.generateReportFormatMarkdown(report);
-        Assertions.assertNotNull(reportString);
+        String expectedReport = "#### Общая информация\n" +
+            "\n" +
+            "|        Метрика        |                Значение                |\n" +
+            "|:---------------------:|:--------------------------------------:|\n" +
+            "|       Файл(-ы)        |                            [log1, log2]|\n" +
+            "|    Начальная дата     | 2024-11-11T14:28:12.921336+03:00[Europe/Moscow]|\n" +
+            "|     Конечная дата     |                                       -|\n" +
+            "|  Количество запросов  |                                   19137|\n" +
+            "| Средний размер ответа |                           23331,000000b|\n" +
+            "|   95p размера ответа  |                            2956,000000b|\n" +
+            "\n" +
+            "#### Запрашиваемые ресурсы\n" +
+            "\n" +
+            "|     Ресурс             | Количество       |\n" +
+            "|:----------------------:|-----------------:|\n" +
+            "| /download_3            |              4673|\n" +
+            "| /download_2            |             46731|\n" +
+            "| /download_1            |            467312|\n" +
+            "\n" +
+            "#### Коды ответа\n" +
+            "\n" +
+            "| Код |          Имя          | Количество  |\n" +
+            "|:---:|:---------------------:|------------:|\n" +
+            "| 200 | OK                    |     90012312|\n" +
+            "| 500 | Internal Server Error |            6|\n" +
+            "| 404 | Not Found             |        50000|";
+
+        Assertions.assertEquals(expectedReport, reportString);
     }
 }
