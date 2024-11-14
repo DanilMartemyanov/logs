@@ -29,7 +29,7 @@ public class AnalyzerManager {
 
     public void analyzeLogFile(String pathLog, ZonedDateTime from, ZonedDateTime to, String format) {
         Stream<LogRecord> logRecords;
-        if (pathLog.startsWith("https//")) {
+        if (pathLog.startsWith("https://")) {
             reader = new ReaderUrl(HttpClient.newHttpClient(), factoryLog);
             logRecords = reader.read(pathLog);
             fileNames = new ArrayList<>();
