@@ -18,7 +18,6 @@ public class HttpStatusHelper {
             "500", "Internal Server Error",
             "502", "Bad Gateway",
             "503", "Service Unavailable"
-            // Добавьте другие коды состояния, если необходимо
         );
 
         return httpStatusNames.getOrDefault(statusCode, "Unknown Status");

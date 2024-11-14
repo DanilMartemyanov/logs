@@ -19,7 +19,7 @@ public class CalculatingStatisticsTest {
     void getStatisticsTest() {
         FactoryLog factoryLog = new FactoryLogsImpl();
         Reader reader = new ReaderFile(factoryLog);
-        String link = "src/main/resources/logs/";
+        String link = "src/test/java/backend/academy/resources/logs/";
         Stream<LogRecord> logRecordStream = reader.read(link);
         CalculatingStatistics calculatingStatistics = new CalculatingStatisticsImpl();
         StatisticsData statisticsData = calculatingStatistics.getStatistic(logRecordStream, ZonedDateTime.parse("2015-05-17T08:05:32Z"),

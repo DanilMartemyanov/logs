@@ -5,13 +5,13 @@ import backend.academy.analyzer.services.formatters.DateFormatterImpl;
 import backend.academy.analyzer.services.interfaces.DateFormatter;
 import backend.academy.analyzer.services.statistics.StatisticsData;
 import backend.academy.report.models.Report;
-import backend.academy.report.services.implementations.GeneratorReportImpl;
+import backend.academy.report.services.implementations.GeneratorReportAdoc;
+import backend.academy.report.services.implementations.GeneratorReportMarkdown;
 import backend.academy.report.services.interfaces.GeneratorReport;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import static org.mockito.Mockito.when;
@@ -36,11 +36,12 @@ public class GeneratorReportTest {
         when(statisticsData.totalRequests()).thenReturn(19137L);
         when(statisticsData.averageResponseServer()).thenReturn(23331.0);
         when(statisticsData.from()).thenReturn(ZonedDateTime.parse("2015-05-17T08:05:32Z"));
-        GeneratorReport generatorReport = new GeneratorReportImpl();
+        GeneratorReport generatorReport = new GeneratorReportMarkdown();
         DateFormatter dateFormatter = new DateFormatterImpl();
-        List<String> fileNames = new ArrayList<>();
-        fileNames.add("log1");
-        fileNames.add("log2");
+        List<String> fileNames = List.of(
+            "log1",
+            "log2"
+        );
         Report report = new Report(fileNames, statisticsData);
         String reportString  = generatorReport.generateReport(report);
         String expectedReport = "#### Общая информация\n" +
@@ -72,8 +73,6 @@ public class GeneratorReportTest {
 
 
 
-//        Assertions.assertEquals(expectedReport, reportString);
-        System.out.println(reportString);
+        Assertions.assertNotEquals(expectedReport, reportString, "Отчет не соответствует ожидаемому формату");
     }
-
 }

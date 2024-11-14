@@ -36,7 +36,7 @@ public class ReaderTest {
     void readFileTest(){
         FactoryLog factoryLog = new FactoryLogsImpl();
         Reader reader = new ReaderFile(factoryLog);
-        Stream<LogRecord> logs = reader.read("src/main/resources/logs/");
+        Stream<LogRecord> logs = reader.read("src/test/java/backend/academy/resources/logs/");
         Assertions.assertNotNull(logs);
 
     }
@@ -46,11 +46,12 @@ public class ReaderTest {
         String mockData = "log line 1";
         InputStream mockInputStream = new ByteArrayInputStream(mockData.getBytes());
 
+
         when(mockHttpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
             .thenReturn(mockHttpResponse);
         when(mockHttpResponse.body()).thenReturn(mockInputStream);
 
-        ReaderUrl logReader = new ReaderUrl( HttpClient.newHttpClient(), new FactoryLogsImpl());
+        ReaderUrl logReader = new ReaderUrl( mockHttpClient, new FactoryLogsImpl());
 
         try (BufferedReader reader = logReader.getResponseServer("http://example.com/logs")) {
             Assertions.assertEquals("log line 1", reader.readLine());
@@ -63,7 +64,6 @@ public class ReaderTest {
         Reader logReader = new ReaderUrl(HttpClient.newHttpClient(),new FactoryLogsImpl());
         String log = "93.180.71.3 - - [17/May/2015:08:05:32 +0000] \"GET /downloads/product_1 HTTP/1.1\" 304 0 \"-\" \"Debian APT-HTTP/1.3 (0.8.16~exp12ubuntu10.21)\"";
         InputStream mockInputStream = new ByteArrayInputStream(log.getBytes());
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(mockInputStream));
         when(mockHttpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
             .thenReturn(mockHttpResponse);
         when(mockHttpResponse.body()).thenReturn(mockInputStream);
