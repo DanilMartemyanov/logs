@@ -13,7 +13,7 @@ import lombok.extern.log4j.Log4j2;
 @SuppressFBWarnings({"PATH_TRAVERSAL_IN", "BED_BOGUS_EXCEPTION_DECLARATION"})
 @Log4j2
 public class Main {
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) {
         try {
             AnalyzerManager manager = new AnalyzerManager();
             CommandLineArgs userArgs = CommandLineArgs.parseArguments(args);
